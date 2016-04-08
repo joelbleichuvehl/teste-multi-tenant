@@ -59,13 +59,16 @@ exports.delete = function (req, res) {
  * List of Users
  */
 exports.list = function (req, res) {
-  User.find({}, '-salt -password').sort('-created').populate('user', 'displayName').exec(function (err, users) {
+  var filtro = {};
+  if (req.user.roles.indexOf('root') === -1) {
+    filtro = { inquilino: req.user._id };
+  }
+  User.find(filtro, '-salt -password').sort('-created').populate('user', 'displayName').exec(function (err, users) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     }
-
     res.json(users);
   });
 };
@@ -80,10 +83,11 @@ exports.userByID = function (req, res, next, id) {
     });
   }
 
-  User.findById(id, '-salt -password').exec(function (err, user) {
+  User.findById(id, '-salt -password').populate('inquilino').exec(function (err, user) {
     if (err) {
       return next(err);
     } else if (!user) {
+      console.log('bah tche');
       return next(new Error('Failed to load user ' + id));
     }
 
