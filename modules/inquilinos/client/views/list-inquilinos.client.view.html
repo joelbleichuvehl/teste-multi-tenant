@@ -1,0 +1,13 @@
+<section>
+  <div class="page-header">
+    <h1>Inquilinos</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="inquilino in vm.inquilinos" ui-sref="inquilinos.view({ inquilinoId: inquilino._id })" class="list-group-item">
+      <h4 ng-bind="inquilino.nome"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.inquilinos.$resolved && !vm.inquilinos.length">
+    No inquilinos yet, why don't you <a ui-sref="inquilinos.create">create one</a>?
+  </div>
+</section>
