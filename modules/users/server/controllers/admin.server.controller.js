@@ -61,7 +61,7 @@ exports.delete = function (req, res) {
 exports.list = function (req, res) {
   var filtro = {};
   if (req.user.roles.indexOf('root') === -1) {
-    filtro = { inquilino: req.user._id };
+    filtro = { inquilino: req.user.inquilino };
   }
   User.find(filtro, '-salt -password').sort('-created').populate('user', 'displayName').exec(function (err, users) {
     if (err) {
